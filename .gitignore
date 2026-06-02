@@ -1,0 +1,8 @@
+# OS temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Text extraction temporary files
+questionnaire_a.txt
+questionnaire_b.txt

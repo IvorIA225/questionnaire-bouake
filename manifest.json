@@ -1,0 +1,22 @@
+{
+  "name": "Enquêtes de Terrain - Université de Bouaké",
+  "short_name": "Enquêtes Bouaké",
+  "description": "Système numérique d'enquêtes hors-ligne (Offline-First) pour études sur les agents conversationnels vocaux.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
