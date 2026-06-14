@@ -79,14 +79,14 @@
                         <span style="font-size: 0.75rem; color: var(--text-secondary);" id="stat-completion-pct">100% complétées</span>
                     </div>
                     <div class="stat-card stat-a">
-                        <span class="stat-label">Groupe A (Robot)</span>
+                        <span class="stat-label">Groupe A</span>
                         <span class="stat-val" id="stat-a-count">0</span>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Voix Synthétique</span>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Voix robotique locale</span>
                     </div>
                     <div class="stat-card stat-b">
-                        <span class="stat-label">Groupe B (Humain)</span>
+                        <span class="stat-label">Groupe B</span>
                         <span class="stat-val" id="stat-b-count">0</span>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Voix Clonée</span>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Voix humaine locale clonée</span>
                     </div>
                 </div>
 
@@ -156,7 +156,7 @@
                 <!-- Survey Header -->
                 <div class="survey-header">
                     <div class="survey-title-group">
-                        <h2 id="survey-step-title">Sélection du Groupe</h2>
+                        <h2 id="survey-step-title">Partie 0 : Filtrage préliminaire</h2>
                         <p id="survey-step-subtitle">Étape 1 sur 6</p>
                     </div>
                     <div class="stepper" id="survey-stepper">
@@ -172,37 +172,10 @@
                 <form id="survey-form" onsubmit="return false;">
                     
                     <!-- ============================================== -->
-                    <!-- ÉTAPE 1 : CHOIX DU GROUPE                      -->
+                    <!-- ÉTAPE 1 : PARTIE 0 - FILTRAGE PRÉLIMINAIRE     -->
                     <!-- ============================================== -->
                     <div class="survey-step active" data-step="1">
-                        <p style="color: var(--text-secondary); margin-bottom: 24px; text-align: center;">
-                            Sélectionnez le groupe correspondant à l'enquête en cours. Les questions s'adapteront automatiquement.
-                        </p>
-                        
-                        <div class="group-selector-grid">
-                            <div class="select-card selected" onclick="selectSurveyGroup('A')" id="card-group-a">
-                                <div class="card-icon">🤖</div>
-                                <h3>Groupe A</h3>
-                                <p>Voix robotique synthétique standard</p>
-                            </div>
-                            <div class="select-card" onclick="selectSurveyGroup('B')" id="card-group-b">
-                                <div class="card-icon">🗣️</div>
-                                <h3>Groupe B</h3>
-                                <p>Voix humaine clonée de haute qualité</p>
-                            </div>
-                        </div>
-
-                        <!-- Confidentiality Warning Quick Reminder -->
-                        <div class="confidentiality-box" style="margin-top: 20px;">
-                            <strong>Note pour l'enquêteur :</strong> Lisez la note de confidentialité disponible dans l'onglet Aide au répondant avant de commencer le filtrage.
-                        </div>
-                    </div>
-
-                    <!-- ============================================== -->
-                    <!-- ÉTAPE 2 : LOGIQUE DE FILTRAGE                  -->
-                    <!-- ============================================== -->
-                    <div class="survey-step" data-step="2">
-                        <div class="question-meta">Questions préliminaires (Admissibilité)</div>
+                        <div class="question-meta">Partie 0 : Questions filtres (Admissibilité)</div>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">
                             Posez ces questions au répondant <strong>avant</strong> l'écoute. Si un critère de rejet est atteint, le questionnaire doit être arrêté.
                         </p>
@@ -222,12 +195,18 @@
                             </div>
                         </div>
 
-                        <!-- QF2: Language (Adapts to Group A/B) -->
+                        <!-- QF2: Language (static at step 1 - group not yet chosen) -->
                         <div class="question-block" id="block-qf-lang">
-                            <!-- Label updated by JS dynamically -->
                             <div class="question-text" id="lbl-qf-lang">2. Est-ce que vous comprenez et parlez le Dioula ?</div>
                             <div class="radio-options-row" id="container-qf-lang">
-                                <!-- Options populated by JS to support correct naming -->
+                                <label class="option-pill-label">
+                                    <input type="radio" name="qf_lang" value="Oui" required onchange="evaluateEligibility()">
+                                    <span class="option-pill-btn">Oui</span>
+                                </label>
+                                <label class="option-pill-label">
+                                    <input type="radio" name="qf_lang" value="Non" onchange="evaluateEligibility()">
+                                    <span class="option-pill-btn">Non</span>
+                                </label>
                             </div>
                         </div>
 
@@ -284,19 +263,45 @@
                     </div>
 
                     <!-- ============================================== -->
-                    <!-- ÉTAPE 3 : STIMULUS VOCAL (PARTIE 0)            -->
+                    <!-- ÉTAPE 2 : SÉLECTION DU GROUPE                  -->
+                    <!-- ============================================== -->
+                    <div class="survey-step" data-step="2">
+                        <p style="color: var(--text-secondary); margin-bottom: 24px; text-align: center;">
+                            Sélectionnez le groupe de stimulus correspondant au répondant. Les questions s'adapteront automatiquement.
+                        </p>
+
+                        <div class="group-selector-grid">
+                            <div class="select-card selected" onclick="selectSurveyGroup('A')" id="card-group-a">
+                                <div class="card-icon">🤖</div>
+                                <h3>Groupe A</h3>
+                                <p>Voix robotique locale</p>
+                            </div>
+                            <div class="select-card" onclick="selectSurveyGroup('B')" id="card-group-b">
+                                <div class="card-icon">🗣️</div>
+                                <h3>Groupe B</h3>
+                                <p>Voix humaine locale clonée</p>
+                            </div>
+                        </div>
+
+                        <div class="confidentiality-box" style="margin-top: 20px;">
+                            <strong>Note pour l'enquêteur :</strong> Le répondant est admissible. Sélectionnez maintenant le groupe auquel il appartient pour ce passage de questionnaire.
+                        </div>
+                    </div>
+
+                    <!-- ============================================== -->
+                    <!-- ÉTAPE 3 : STIMULUS VOCAL (PARTIE 1 - ÉCOUTE)   -->
                     <!-- ============================================== -->
                     <div class="survey-step" data-step="3">
-                        <div class="question-meta">Partie 0 : Présentation du stimulus</div>
+                        <div class="question-meta">Présentation du stimulus vocal</div>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                            Faites écouter le stimulus vocal au répondant. Vous pouvez diffuser l'enregistrement ci-dessous.
+                            Faites écouter le stimulus vocal au répondant correspondant au groupe sélectionné. Vous pouvez diffuser l'enregistrement ci-dessous.
                         </p>
 
                         <!-- Custom Premium Audio Player -->
                         <div class="audio-player-card">
                             <div class="audio-header-info">
-                                <span class="audio-title" id="player-stimulus-title">Stimulus Groupe A (Robotique)</span>
-                                <span class="audio-badge" id="player-stimulus-badge">Robotique</span>
+                                <span class="audio-title" id="player-stimulus-title">Stimulus Groupe A — Voix robotique locale</span>
+                                <span class="audio-badge" id="player-stimulus-badge">Robotique locale</span>
                             </div>
                             
                             <div class="audio-controls">
@@ -347,9 +352,9 @@
                     <!-- ÉTAPE 4 : QUESTIONNAIRE LIKERT (PARTIES 1-3)   -->
                     <!-- ============================================== -->
                     <div class="survey-step" data-step="4">
-                        <div class="question-meta">Parties 1 à 3 : Évaluation Orale</div>
+                        <div class="question-meta">Parties 1, 2 et 3 : Évaluation orale (Likert 1–5)</div>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                            Lisez chaque énoncé à haute voix au répondant et enregistrez sa réponse sur l'échelle visuelle.
+                            Lisez chaque énoncé à haute voix au répondant et enregistrez sa réponse sur l'échelle d'emojis visuelle.
                         </p>
 
                         <!-- Survey Questions Likert dynamic container -->
@@ -359,13 +364,19 @@
                     </div>
 
                     <!-- ============================================== -->
-                    <!-- ÉTAPE 5 : PROFIL DU RÉPONDANT                  -->
+                    <!-- ÉTAPE 5 : PROFIL DU RÉPONDANT (PARTIE 4)       -->
                     <!-- ============================================== -->
                     <div class="survey-step" data-step="5">
                         <div class="question-meta">Partie 4 : Profil du répondant</div>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">
                             Saisissez les informations démographiques du répondant.
                         </p>
+
+                        <!-- Display active respondent group -->
+                        <div class="active-group-indicator" style="margin-bottom: 20px; padding: 12px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; transition: border-color 0.2s ease;">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;">Groupe de répondants :</span>
+                            <span id="profile-active-group-badge" style="font-weight: 800; font-size: 0.95rem; color: var(--primary);">Groupe A — Voix robotique locale</span>
+                        </div>
 
                         <!-- P1: Sexe -->
                         <div class="question-block">
@@ -489,7 +500,7 @@
                             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
                                 <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                     <span style="color: var(--text-secondary);">Groupe de recherche :</span>
-                                    <strong id="recap-group-name" style="color: var(--primary);">Groupe A (Voix Robotique)</strong>
+                                    <strong id="recap-group-name" style="color: var(--primary);">Groupe A — Voix robotique locale</strong>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                     <span style="color: var(--text-secondary);">Admissibilité :</span>

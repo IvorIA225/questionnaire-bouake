@@ -315,52 +315,38 @@ function selectSurveyGroup(group) {
     if (group === 'A') {
         cardA.classList.add("selected");
         cardB.classList.remove("selected");
-        document.getElementById("recap-group-name").textContent = "Groupe A (Voix Robotique)";
+        document.getElementById("recap-group-name").textContent = "Groupe A — Voix robotique locale";
         document.getElementById("recap-group-name").style.color = "var(--primary)";
-        document.getElementById("player-stimulus-title").textContent = "Stimulus Groupe A (Robotique)";
-        document.getElementById("player-stimulus-badge").textContent = "Robotique";
+        document.getElementById("player-stimulus-title").textContent = "Stimulus Groupe A — Voix robotique locale";
+        document.getElementById("player-stimulus-badge").textContent = "Robotique locale";
         document.getElementById("player-stimulus-badge").style.borderColor = "var(--primary)";
         document.getElementById("player-stimulus-badge").style.color = "var(--primary)";
     } else {
         cardA.classList.remove("selected");
         cardB.classList.add("selected");
-        document.getElementById("recap-group-name").textContent = "Groupe B (Voix Humaine Clonée)";
+        document.getElementById("recap-group-name").textContent = "Groupe B — Voix humaine locale clonée";
         document.getElementById("recap-group-name").style.color = "var(--accent)";
-        document.getElementById("player-stimulus-title").textContent = "Stimulus Groupe B (Clonée)";
-        document.getElementById("player-stimulus-badge").textContent = "Humaine Clonée";
+        document.getElementById("player-stimulus-title").textContent = "Stimulus Groupe B — Voix humaine locale clonée";
+        document.getElementById("player-stimulus-badge").textContent = "Humaine clonée";
         document.getElementById("player-stimulus-badge").style.borderColor = "var(--accent)";
         document.getElementById("player-stimulus-badge").style.color = "var(--accent)";
     }
     
-    // Dynamically update screening question 2 based on selection
-    const lblLang = document.getElementById("lbl-qf-lang");
-    const containerLang = document.getElementById("container-qf-lang");
-    
-    if (group === 'A') {
-        lblLang.textContent = "2. Est-ce que vous comprenez et parlez le Dioula ?";
-        containerLang.innerHTML = `
-            <label class="option-pill-label">
-                <input type="radio" name="qf_lang" value="Oui" required onchange="evaluateEligibility()">
-                <span class="option-pill-btn">Oui</span>
-            </label>
-            <label class="option-pill-label">
-                <input type="radio" name="qf_lang" value="Non" onchange="evaluateEligibility()">
-                <span class="option-pill-btn">Non</span>
-            </label>
-        `;
-    } else {
-        lblLang.textContent = "2. Quelle est votre langue maternelle ?";
-        containerLang.innerHTML = `
-            <label class="option-pill-label">
-                <input type="radio" name="qf_lang" value="Dioula" required onchange="evaluateEligibility()">
-                <span class="option-pill-btn">Dioula</span>
-            </label>
-            <label class="option-pill-label">
-                <input type="radio" name="qf_lang" value="Autre" onchange="evaluateEligibility()">
-                <span class="option-pill-btn">Autre</span>
-            </label>
-        `;
+    // Update the profile indicator badge
+    const profileBadge = document.getElementById("profile-active-group-badge");
+    if (profileBadge) {
+        if (group === 'A') {
+            profileBadge.textContent = "Groupe A — Voix robotique locale";
+            profileBadge.style.color = "var(--primary)";
+            profileBadge.parentElement.style.borderLeftColor = "var(--primary)";
+        } else {
+            profileBadge.textContent = "Groupe B — Voix humaine locale clonée";
+            profileBadge.style.color = "var(--accent)";
+            profileBadge.parentElement.style.borderLeftColor = "var(--accent)";
+        }
     }
+    
+    // (Language question QF2 is static in HTML step 1 - no dynamic injection needed)
     
     // Re-populate Likert questions matching the group
     populateLikertQuestions();
@@ -428,8 +414,8 @@ function evaluateEligibility() {
     // Screening Logic Check
     if (qfAge === "Non") isPass = false;
     
-    if (currentSurveyGroup === 'A' && qfLang === "Non") isPass = false;
-    if (currentSurveyGroup === 'B' && qfLang === "Autre") isPass = false;
+    // QF2: La question de langue est identique pour les deux groupes (Dioula Oui/Non)
+    if (qfLang === "Non") isPass = false;
     
     if (qfLecture === "Lit bien") isPass = false;
     if (qfResidence === "Non") isPass = false;
@@ -445,7 +431,7 @@ function evaluateEligibility() {
     const blockLect = document.getElementById("block-qf-lecture");
     const blockResi = document.getElementById("block-qf-residence");
     
-    if (currentSurveyStep === 2) {
+    if (currentSurveyStep === 1) {
         if (!isEligible) {
             failBox.style.display = "flex";
             if (nextBtn) nextBtn.disabled = true;
@@ -527,8 +513,8 @@ function validateStepCompletion(step) {
         }
     });
     
-    // Additional eligibility check for Step 2 (screening)
-    if (step === 2 && !isEligible) {
+    // Additional eligibility check for Step 1 (screening / Partie 0)
+    if (step === 1 && !isEligible) {
         allValid = false;
     }
     
@@ -562,11 +548,11 @@ function updateSurveyStepUI() {
     const subtitle = document.getElementById("survey-step-subtitle");
     
     const stepDetails = {
-        1: { title: "Sélection du Groupe", sub: "Étape 1 sur 6" },
-        2: { title: "Filtrage Préliminaire", sub: "Étape 2 sur 6" },
-        3: { title: "Stimulus Vocal (Partie 0)", sub: "Étape 3 sur 6" },
-        4: { title: "Évaluation Orale", sub: "Étape 4 sur 6" },
-        5: { title: "Profil du répondant", sub: "Étape 5 sur 6" },
+        1: { title: "Partie 0 : Filtrage préliminaire", sub: "Étape 1 sur 6" },
+        2: { title: "Sélection du Groupe", sub: "Étape 2 sur 6" },
+        3: { title: "Présentation du stimulus vocal", sub: "Étape 3 sur 6" },
+        4: { title: "Parties 1-3 : Évaluation orale", sub: "Étape 4 sur 6" },
+        5: { title: "Partie 4 : Profil du répondant", sub: "Étape 5 sur 6" },
         6: { title: "Validation & Enregistrement", sub: "Étape 6 sur 6" }
     };
     
@@ -592,8 +578,8 @@ function updateSurveyStepUI() {
             nextBtn.classList.remove("btn-success");
             nextBtn.classList.add("btn-primary");
             
-            // Re-evaluate eligibility for step 2 button blocking
-            if (currentSurveyStep === 2) {
+            // Re-evaluate eligibility for step 1 button blocking
+            if (currentSurveyStep === 1) {
                 evaluateEligibility();
             } else {
                 nextBtn.disabled = false;
@@ -613,7 +599,7 @@ function updateSurveyStepUI() {
 }
 
 function populateSurveyRecap() {
-    const groupName = currentSurveyGroup === 'A' ? "Groupe A (Voix Robotique)" : "Groupe B (Voix Humaine Clonée)";
+    const groupName = currentSurveyGroup === 'A' ? "Groupe A — Voix robotique locale" : "Groupe B — Voix humaine locale clonée";
     document.getElementById("recap-group-name").textContent = groupName;
     document.getElementById("recap-group-name").style.color = currentSurveyGroup === 'A' ? "var(--primary)" : "var(--accent)";
     
@@ -1329,18 +1315,10 @@ function closeDetailModal() {
 
 // --- CSV EXPORTER (EXCEL & SPSS COMPATIBLE WITH BOM) ---
 // --- CSV EXPORTER (EXCEL & SPSS COMPATIBLE WITH BOM) ---
-function exportDataToCSV() {
-    if (collectedResponses.length === 0) {
-        alert("Aucune donnée à exporter.");
-        return;
-    }
-    
-    // Sort responses by Group (A/1 first, then B/2) and then chronologically within each group
-    const sortedResponses = [...collectedResponses].sort((a, b) => {
-        if (a.group !== b.group) {
-            return a.group.localeCompare(b.group); // Group A before Group B
-        }
-        return new Date(a.rawTimestamp) - new Date(b.rawTimestamp); // Chronological order
+function generateCSV(responses, groupSuffix) {
+    // Sort responses chronologically within the group/selection
+    const sortedResponses = [...responses].sort((a, b) => {
+        return new Date(a.rawTimestamp) - new Date(b.rawTimestamp);
     });
     
     // Coding dictionary for respondent profiles based on official questionnaires
@@ -1360,6 +1338,7 @@ function exportDataToCSV() {
         ...SURVEY_ITEMS.map(item => item.code),
         // Grouping variable (1 = Groupe A, 2 = Groupe B)
         "GROUPE",
+        "GROUPE_DE_REPONDANTS",
         // Profile numeric codes (Partie 4)
         "SEXE",
         "AGE",
@@ -1385,6 +1364,7 @@ function exportDataToCSV() {
             ...SURVEY_ITEMS.map(item => s.answers[item.code] !== undefined ? s.answers[item.code] : ""),
             // Group (1 = A, 2 = B)
             s.group === "A" ? 1 : 2,
+            s.group === "A" ? "Groupe A — Voix robotique locale" : "Groupe B — Voix humaine locale clonée",
             // Profile data mapped to academic codes (1, 2, 3...)
             PROFILE_CODES.sexe[s.profile.sexe] !== undefined ? PROFILE_CODES.sexe[s.profile.sexe] : "",
             PROFILE_CODES.age[s.profile.age] !== undefined ? PROFILE_CODES.age[s.profile.age] : "",
@@ -1414,8 +1394,7 @@ function exportDataToCSV() {
         }).join(";"))
     ].join("\n");
     
-    // To make sure Excel on Windows opens it natively in UTF-8 without scrambled french accents or emojis:
-    // We prepend the UTF-8 Byte Order Mark (BOM)
+    // Prepend the UTF-8 Byte Order Mark (BOM) for Excel compatibility
     const BOM = "\uFEFF";
     const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -1425,14 +1404,65 @@ function exportDataToCSV() {
     link.setAttribute("href", url);
     
     const now = new Date();
-    const filename = `ENQUETES_BOUAKE_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.csv`;
+    const groupStr = groupSuffix === "A" ? "GROUPE_A" : (groupSuffix === "B" ? "GROUPE_B" : "TOUS_GROUPES");
+    const filename = `ENQUETES_BOUAKE_${groupStr}_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.csv`;
     link.setAttribute("download", filename);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function exportDataToCSV() {
+    if (collectedResponses.length === 0) {
+        alert("Aucune donnée à exporter.");
+        return;
+    }
     
-    alert(`Fichier CSV sauvegardé sous le nom :\n${filename}\n\nCe fichier s'ouvre directement dans Microsoft Excel avec les colonnes ordonnées (ID en colonne A, suivi de PDLV1 en colonne B, etc.).`);
+    const groupFilter = document.getElementById("data-filter-group").value;
+    const statusFilter = document.getElementById("data-filter-status").value;
+    const searchVal = document.getElementById("data-search-input").value.toLowerCase();
+    
+    // Filter responses based on UI filters
+    const filteredResponses = collectedResponses.filter(s => {
+        const matchesSearch = s.id.toLowerCase().includes(searchVal);
+        const matchesGroup = groupFilter === "ALL" || s.group === groupFilter;
+        const matchesStatus = statusFilter === "ALL" || s.eligibility === statusFilter;
+        return matchesSearch && matchesGroup && matchesStatus;
+    });
+    
+    if (filteredResponses.length === 0) {
+        alert("Aucune donnée ne correspond aux filtres actifs pour l'exportation.");
+        return;
+    }
+    
+    if (groupFilter === "ALL") {
+        const responsesA = filteredResponses.filter(s => s.group === "A");
+        const responsesB = filteredResponses.filter(s => s.group === "B");
+        
+        let exportedGroups = [];
+        if (responsesA.length > 0) {
+            generateCSV(responsesA, "A");
+            exportedGroups.push("Groupe A — Voix robotique locale");
+        }
+        if (responsesB.length > 0) {
+            // Slight delay so the browser can queue both downloads properly
+            setTimeout(() => {
+                generateCSV(responsesB, "B");
+            }, 500);
+            exportedGroups.push("Groupe B (Voix Humaine Clonée)");
+        }
+        
+        if (exportedGroups.length > 0) {
+            alert(`Exportation réussie par groupe !\nFichiers CSV générés pour : ${exportedGroups.join(' et ')}.\n\nCes fichiers s'ouvrent directement dans Microsoft Excel.`);
+        } else {
+            alert("Aucune donnée à exporter pour les groupes A ou B.");
+        }
+    } else {
+        generateCSV(filteredResponses, groupFilter);
+        const groupLabel = groupFilter === "A" ? "Groupe A — Voix robotique locale" : "Groupe B — Voix humaine locale clonée";
+        alert(`Exportation réussie pour le ${groupLabel} !\nLe fichier CSV a été généré.\n\nIl s'ouvre directement dans Microsoft Excel.`);
+    }
 }
 
 // --- UTILITIES ---
