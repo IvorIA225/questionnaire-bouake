@@ -15,25 +15,25 @@ const LIKERT_LABELS = {
 };
 
 const SURVEY_ITEMS = [
-    // PARTIE 1 : Perception de la voix (PDLV)
-    { code: "PDLV1", category: "Perception de la Voix", text: "La voix que j'ai entendue sonnait naturelle, comme une vraie voix humaine." },
-    { code: "PDLV2", category: "Perception de la Voix", text: "Cette voix me semblait claire et facile à comprendre." },
-    { code: "PDLV3", category: "Perception de la Voix", text: "La voix que j'ai entendue était agréable à écouter." },
-    { code: "PDLV4", category: "Perception de la Voix", text: "La voix que j'ai entendue me donnait l'impression de parler avec une vraie personne." },
+    // PARTIE 2 : Perception de la voix (PDLV)
+    { code: "PDLV1", category: "Partie 2 : Perception de la voix", text: "La voix que j'ai entendue sonnait naturelle, comme une vraie voix humaine." },
+    { code: "PDLV2", category: "Partie 2 : Perception de la voix", text: "Cette voix me semblait claire et facile à comprendre." },
+    { code: "PDLV3", category: "Partie 2 : Perception de la voix", text: "La voix que j'ai entendue était agréable à écouter." },
+    { code: "PDLV4", category: "Partie 2 : Perception de la voix", text: "La voix que j'ai entendue me donnait l'impression de parler avec une vraie personne." },
 
-    // PARTIE 2 : Distance Psychologique (DP)
-    { code: "DP1", category: "Distance Psychologique", text: "Cette voix me donnait le sentiment que la boutique me comprend et me connaît." },
-    { code: "DP2", category: "Distance Psychologique", text: "La voix entendue me semblait froide et lointaine, comme si la boutique ne me ressemblait pas." },
-    { code: "DP3", category: "Distance Psychologique", text: "Je me sentais proche de cette boutique, comme avec un commerçant familier." },
-    { code: "DP4", category: "Distance Psychologique", text: "En écoutant cette voix, j’avais l’impression de parler avec quelqu’un d’étranger à mon monde." },
-    { code: "DP5", category: "Distance Psychologique", text: "Cette voix me donnait l’impression que cette boutique s’adresse vraiment à des gens comme moi." },
-    { code: "DP6", category: "Distance Psychologique", text: "Cette voix ne me donnait pas l’impression que cette boutique s’adressait à des gens comme moi." },
-    { code: "DP7", category: "Distance Psychologique", text: "Grâce à cette voix, j’avais envie d’échanger avec cette boutique." },
+    // PARTIE 3 : Distance psychologique (DP)
+    { code: "DP1", category: "Partie 3 : Distance psychologique", text: "Cette voix me donnait le sentiment que la boutique me comprend et me connaît." },
+    { code: "DP2", category: "Partie 3 : Distance psychologique", text: "La voix entendue me semblait froide et lointaine, comme si la boutique ne me ressemblait pas." },
+    { code: "DP3", category: "Partie 3 : Distance psychologique", text: "Je me sentais proche de cette boutique, comme avec un commerçant familier." },
+    { code: "DP4", category: "Partie 3 : Distance psychologique", text: "En écoutant cette voix, j’avais l’impression de parler avec quelqu’un d’étranger à mon monde." },
+    { code: "DP5", category: "Partie 3 : Distance psychologique", text: "Cette voix me donnait l’impression que cette boutique s’adresse vraiment à des gens comme moi." },
+    { code: "DP6", category: "Partie 3 : Distance psychologique", text: "Cette voix ne me donnait pas l’impression que cette boutique s’adressait à des gens comme moi." },
+    { code: "DP7", category: "Partie 3 : Distance psychologique", text: "Grâce à cette voix, j’avais envie d’échanger avec cette boutique." },
 
-    // PARTIE 3 : L'intention d'achat
-    { code: "IA1", category: "L'intention d'achat", text: "J'envisagerais d'acheter un produit sur cette boutique en ligne." },
-    { code: "IA2", category: "L'intention d'achat", text: "Je serais prêt(e) à passer une commande sur cette boutique avec mon téléphone." },
-    { code: "IA3", category: "L'intention d'achat", text: "Je choisirais cette boutique plutôt que d'aller au marché pour certains achats." }
+    // PARTIE 4 : L'intention d'achat (IA)
+    { code: "IA1", category: "Partie 4 : Intention d'achat", text: "J'envisagerais d'acheter un produit sur cette boutique en ligne." },
+    { code: "IA2", category: "Partie 4 : Intention d'achat", text: "Je serais prêt(e) à passer une commande sur cette boutique avec mon téléphone." },
+    { code: "IA3", category: "Partie 4 : Intention d'achat", text: "Je choisirais cette boutique plutôt que d'aller au marché pour certains achats." }
 ];
 
 // --- APP STATE ---
@@ -528,11 +528,11 @@ function updateSurveyStepUI() {
     const subtitle = document.getElementById("survey-step-subtitle");
     
     const stepDetails = {
-        1: { title: "Partie 0 : Filtrage préliminaire", sub: "Étape 1 sur 6" },
+        1: { title: "Partie 0 : Questions filtres d'éligibilité", sub: "Étape 1 sur 6" },
         2: { title: "Sélection du Groupe", sub: "Étape 2 sur 6" },
-        3: { title: "Présentation du stimulus vocal", sub: "Étape 3 sur 6" },
-        4: { title: "Parties 1-3 : Évaluation orale", sub: "Étape 4 sur 6" },
-        5: { title: "Partie 4 : Profil du répondant", sub: "Étape 5 sur 6" },
+        3: { title: "Partie 1 : Diffusion du stimulus vocal", sub: "Étape 3 sur 6" },
+        4: { title: "Parties 2-4 : Évaluation des items", sub: "Étape 4 sur 6" },
+        5: { title: "Partie 5 : Profil sociodémographique", sub: "Étape 5 sur 6" },
         6: { title: "Validation & Enregistrement", sub: "Étape 6 sur 6" }
     };
     
@@ -1319,7 +1319,7 @@ function generateCSV(responses, groupSuffix) {
         // Grouping variable (1 = Groupe A, 2 = Groupe B)
         "GROUPE",
         "GROUPE_DE_REPONDANTS",
-        // Profile numeric codes (Partie 4)
+        // Profile numeric codes (Partie 5)
         "SEXE",
         "AGE",
         "SITUATION_PROFESSIONNELLE",
