@@ -21,36 +21,19 @@ const SURVEY_ITEMS = [
     { code: "PDLV3", category: "Perception de la Voix", text: "La voix que j'ai entendue était agréable à écouter." },
     { code: "PDLV4", category: "Perception de la Voix", text: "La voix que j'ai entendue me donnait l'impression de parler avec une vraie personne." },
 
-    // PARTIE 2 : Distance Psychologique (DSP)
-    { code: "DSP1", category: "Distance Psychologique", text: "Cette voix me donnait le sentiment que la boutique me comprend et me connaît." },
-    { code: "DSP2", category: "Distance Psychologique", text: "La voix entendue me semblait froide et lointaine, comme si la boutique ne me ressemblait pas." },
-    { code: "DSP3", category: "Distance Psychologique", text: "Je me sentais proche de cette boutique, comme avec un commerçant familier." },
-    { code: "DSP4", category: "Distance Psychologique", text: "En écoutant cette voix, j’avais l’impression de parler avec quelqu’un d’étranger à mon monde." },
-    { code: "DSP5", category: "Distance Psychologique", text: "Cette voix me donnait l’impression que cette boutique s’adresse vraiment à des gens comme moi." },
-    { code: "DSP6", category: "Distance Psychologique", text: "Cette voix ne me donnait pas l’impression que cette boutique s’adressait à des gens comme moi." },
-    { code: "DSP7", category: "Distance Psychologique", text: "Grâce à cette voix, j’avais envie d’échanger avec cette boutique." },
+    // PARTIE 2 : Distance Psychologique (DP)
+    { code: "DP1", category: "Distance Psychologique", text: "Cette voix me donnait le sentiment que la boutique me comprend et me connaît." },
+    { code: "DP2", category: "Distance Psychologique", text: "La voix entendue me semblait froide et lointaine, comme si la boutique ne me ressemblait pas." },
+    { code: "DP3", category: "Distance Psychologique", text: "Je me sentais proche de cette boutique, comme avec un commerçant familier." },
+    { code: "DP4", category: "Distance Psychologique", text: "En écoutant cette voix, j’avais l’impression de parler avec quelqu’un d’étranger à mon monde." },
+    { code: "DP5", category: "Distance Psychologique", text: "Cette voix me donnait l’impression que cette boutique s’adresse vraiment à des gens comme moi." },
+    { code: "DP6", category: "Distance Psychologique", text: "Cette voix ne me donnait pas l’impression que cette boutique s’adressait à des gens comme moi." },
+    { code: "DP7", category: "Distance Psychologique", text: "Grâce à cette voix, j’avais envie d’échanger avec cette boutique." },
 
-    // PARTIE 3 : Qualité de l'expérience vécue
-    // Satisfaction Globale (SG)
-    { code: "SG1", category: "Satisfaction Globale", text: "Je suis globalement satisfait(e) de l'interaction avec cet assistant vocal." },
-    { code: "SG2", category: "Satisfaction Globale", text: "Cette interaction avec l'assistant vocal a répondu à mes attentes." },
-    { code: "SG3", category: "Satisfaction Globale", text: "L'expérience avec cette boutique en ligne était agréable." },
-    
-    // Intention d'achat (IA)
-    { code: "IA1", category: "Intention d'Achat", text: "J'envisagerais d'acheter un produit sur cette boutique en ligne." },
-    { code: "IA2", category: "Intention d'Achat", text: "Je serais prêt(e) à passer une commande sur cette boutique avec mon téléphone." },
-    { code: "IA3", category: "Intention d'Achat", text: "Je choisirais cette boutique plutôt que d'aller au marché pour certains achats." },
-
-    // Intention de Ré-utilisation (IR)
-    { code: "IR1", category: "Intention de Ré-utilisation", text: "Je souhaite continuer à utiliser ce type de boutique pour mes achats." },
-    { code: "IR2", category: "Intention de Ré-utilisation", text: "Je recommanderais ce type de boutique en ligne parlant ma langue à des amis ou à ma famille." },
-    { code: "IR3", category: "Intention de Ré-utilisation", text: "Un assistant vocal qui parle ma langue me donnerait envie d'utiliser le commerce en ligne plus souvent." },
-
-    // Confiance Perçue (CP)
-    { code: "CP1", category: "Confiance Perçue", text: "Je pense que cette boutique tient ses promesses." },
-    { code: "CP2", category: "Confiance Perçue", text: "Je pense que cette boutique est honnête avec ses clients." },
-    { code: "CP3", category: "Confiance Perçue", text: "Après avoir entendu cette voix, je me sens plus en confiance pour faire des paiements sur la boutique." },
-    { code: "CP4", category: "Confiance Perçue", text: "Je ferais confiance à cette boutique pour me livrer le produit commandé dans les délais." }
+    // PARTIE 3 : L'intention d'achat
+    { code: "IA1", category: "L'intention d'achat", text: "J'envisagerais d'acheter un produit sur cette boutique en ligne." },
+    { code: "IA2", category: "L'intention d'achat", text: "Je serais prêt(e) à passer une commande sur cette boutique avec mon téléphone." },
+    { code: "IA3", category: "L'intention d'achat", text: "Je choisirais cette boutique plutôt que d'aller au marché pour certains achats." }
 ];
 
 // --- APP STATE ---
@@ -373,11 +356,8 @@ function populateLikertQuestions() {
             html += `<h3 style="margin: 24px 0 12px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; color: var(--primary); font-size:1.1rem;">${currentCategory}</h3>`;
         }
         
-        // Exact spelling variation for CP3
+        // Display the item text as-is
         let textToShow = item.text;
-        if (item.code === "CP3" && currentSurveyGroup === "B") {
-            textToShow = "Après avoir entendue cette voix je me sens plus en confiance pour faire des paiements en ligne sur la boutique.";
-        }
         
         html += `
             <div class="question-block" id="block-${item.code}">
@@ -1334,7 +1314,7 @@ function generateCSV(responses, groupSuffix) {
     // Assemble headers row exactly matching academic matrix format
     const headers = [
         "ID",
-        // Likert answers (PDLV1 to CP4)
+        // Likert answers (PDLV1-4, DP1-7, IA1-3)
         ...SURVEY_ITEMS.map(item => item.code),
         // Grouping variable (1 = Groupe A, 2 = Groupe B)
         "GROUPE",
